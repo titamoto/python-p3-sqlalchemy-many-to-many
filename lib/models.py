@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, func
 from sqlalchemy import ForeignKey, Table, Column, Integer, String, DateTime, MetaData
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, func
+from sqlalchemy import PrimaryKeyConstraint
 
 convention = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
@@ -13,8 +14,10 @@ Base = declarative_base(metadata=metadata)
 game_user = Table(
     'game_users',
     Base.metadata,
-    Column('game_id', ForeignKey('games.id'), primary_key=True),
-    Column('user_id', ForeignKey('users.id'), primary_key=True),
+    # Column('id', primary_key=True),
+    Column('game_id', ForeignKey('games.id'), primary_key=True, unique=True),
+    Column('user_id', ForeignKey('users.id'), primary_key=True, unique=True),
+    PrimaryKeyConstraint('game_id', 'user_id'),
     extend_existing=True,
 )
 
